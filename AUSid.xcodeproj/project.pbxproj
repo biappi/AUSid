@@ -12,7 +12,50 @@
 		3FE6C3D2200ACFFA00B84131 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3FE6C3D1200ACFFA00B84131 /* Assets.xcassets */; };
 		3FE6C3D5200ACFFA00B84131 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3FE6C3D3200ACFFA00B84131 /* Main.storyboard */; };
 		3FE6C3F7200AD1E300B84131 /* SimplePlayEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6C3F6200AD1E300B84131 /* SimplePlayEngine.swift */; };
+		3FE6C402200AD48800B84131 /* AudioUnitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6C401200AD48800B84131 /* AudioUnitViewController.swift */; };
+		3FE6C405200AD48800B84131 /* AudioUnitViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3FE6C403200AD48800B84131 /* AudioUnitViewController.xib */; };
+		3FE6C40B200AD48800B84131 /* Instrument macOS.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 3FE6C3FC200AD48800B84131 /* Instrument macOS.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		3FE6C418200ADA5000B84131 /* InstrumentAudioUnit.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6C417200ADA5000B84131 /* InstrumentAudioUnit.mm */; };
+		3FE6C433200ADCD700B84131 /* envelope.cc in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6C41B200ADCD700B84131 /* envelope.cc */; };
+		3FE6C434200ADCD700B84131 /* extfilt.cc in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6C41D200ADCD700B84131 /* extfilt.cc */; };
+		3FE6C435200ADCD700B84131 /* filter.cc in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6C41F200ADCD700B84131 /* filter.cc */; };
+		3FE6C436200ADCD700B84131 /* pot.cc in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6C421200ADCD700B84131 /* pot.cc */; };
+		3FE6C437200ADCD700B84131 /* sid.cc in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6C423200ADCD700B84131 /* sid.cc */; };
+		3FE6C438200ADCD700B84131 /* voice.cc in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6C427200ADCD700B84131 /* voice.cc */; };
+		3FE6C439200ADCD700B84131 /* wave.cc in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6C429200ADCD700B84131 /* wave.cc */; };
+		3FE6C43A200ADCD700B84131 /* wave6581_PST.cc in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6C42B200ADCD700B84131 /* wave6581_PST.cc */; };
+		3FE6C43B200ADCD700B84131 /* wave6581_PS_.cc in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6C42C200ADCD700B84131 /* wave6581_PS_.cc */; };
+		3FE6C43C200ADCD700B84131 /* wave6581_P_T.cc in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6C42D200ADCD700B84131 /* wave6581_P_T.cc */; };
+		3FE6C43D200ADCD700B84131 /* wave6581__ST.cc in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6C42E200ADCD700B84131 /* wave6581__ST.cc */; };
+		3FE6C43E200ADCD700B84131 /* wave8580_PST.cc in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6C42F200ADCD700B84131 /* wave8580_PST.cc */; };
+		3FE6C43F200ADCD700B84131 /* wave8580_PS_.cc in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6C430200ADCD700B84131 /* wave8580_PS_.cc */; };
+		3FE6C440200ADCD700B84131 /* wave8580_P_T.cc in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6C431200ADCD700B84131 /* wave8580_P_T.cc */; };
+		3FE6C441200ADCD700B84131 /* wave8580__ST.cc in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6C432200ADCD700B84131 /* wave8580__ST.cc */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		3FE6C409200AD48800B84131 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3FE6C380200ACD0000B84131 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 3FE6C3FB200AD48800B84131;
+			remoteInfo = "Instrument macOS";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		3FE6C40F200AD48800B84131 /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				3FE6C40B200AD48800B84131 /* Instrument macOS.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		3FE6C3CA200ACFFA00B84131 /* AUSid macOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "AUSid macOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -23,10 +66,51 @@
 		3FE6C3D6200ACFFA00B84131 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3FE6C3D7200ACFFA00B84131 /* AUSid_macOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = AUSid_macOS.entitlements; sourceTree = "<group>"; };
 		3FE6C3F6200AD1E300B84131 /* SimplePlayEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimplePlayEngine.swift; sourceTree = "<group>"; };
+		3FE6C3FC200AD48800B84131 /* Instrument macOS.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Instrument macOS.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		3FE6C401200AD48800B84131 /* AudioUnitViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioUnitViewController.swift; sourceTree = "<group>"; };
+		3FE6C404200AD48800B84131 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/AudioUnitViewController.xib; sourceTree = "<group>"; };
+		3FE6C406200AD48800B84131 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		3FE6C407200AD48800B84131 /* Instrument-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Instrument-Bridging-Header.h"; sourceTree = "<group>"; };
+		3FE6C408200AD48800B84131 /* Instrument_macOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Instrument_macOS.entitlements; sourceTree = "<group>"; };
+		3FE6C413200ADA0F00B84131 /* EventRenderer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EventRenderer.h; sourceTree = "<group>"; };
+		3FE6C416200ADA5000B84131 /* InstrumentAudioUnit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InstrumentAudioUnit.h; sourceTree = "<group>"; };
+		3FE6C417200ADA5000B84131 /* InstrumentAudioUnit.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = InstrumentAudioUnit.mm; sourceTree = "<group>"; };
+		3FE6C419200ADAFB00B84131 /* InstrumentRenderer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InstrumentRenderer.h; sourceTree = "<group>"; };
+		3FE6C41B200ADCD700B84131 /* envelope.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = envelope.cc; sourceTree = "<group>"; };
+		3FE6C41C200ADCD700B84131 /* envelope.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = envelope.h; sourceTree = "<group>"; };
+		3FE6C41D200ADCD700B84131 /* extfilt.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = extfilt.cc; sourceTree = "<group>"; };
+		3FE6C41E200ADCD700B84131 /* extfilt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = extfilt.h; sourceTree = "<group>"; };
+		3FE6C41F200ADCD700B84131 /* filter.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = filter.cc; sourceTree = "<group>"; };
+		3FE6C420200ADCD700B84131 /* filter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = filter.h; sourceTree = "<group>"; };
+		3FE6C421200ADCD700B84131 /* pot.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = pot.cc; sourceTree = "<group>"; };
+		3FE6C422200ADCD700B84131 /* pot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pot.h; sourceTree = "<group>"; };
+		3FE6C423200ADCD700B84131 /* sid.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = sid.cc; sourceTree = "<group>"; };
+		3FE6C424200ADCD700B84131 /* sid.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sid.h; sourceTree = "<group>"; };
+		3FE6C425200ADCD700B84131 /* siddefs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = siddefs.h; sourceTree = "<group>"; };
+		3FE6C426200ADCD700B84131 /* spline.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = spline.h; sourceTree = "<group>"; };
+		3FE6C427200ADCD700B84131 /* voice.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = voice.cc; sourceTree = "<group>"; };
+		3FE6C428200ADCD700B84131 /* voice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = voice.h; sourceTree = "<group>"; };
+		3FE6C429200ADCD700B84131 /* wave.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = wave.cc; sourceTree = "<group>"; };
+		3FE6C42A200ADCD700B84131 /* wave.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = wave.h; sourceTree = "<group>"; };
+		3FE6C42B200ADCD700B84131 /* wave6581_PST.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = wave6581_PST.cc; sourceTree = "<group>"; };
+		3FE6C42C200ADCD700B84131 /* wave6581_PS_.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = wave6581_PS_.cc; sourceTree = "<group>"; };
+		3FE6C42D200ADCD700B84131 /* wave6581_P_T.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = wave6581_P_T.cc; sourceTree = "<group>"; };
+		3FE6C42E200ADCD700B84131 /* wave6581__ST.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = wave6581__ST.cc; sourceTree = "<group>"; };
+		3FE6C42F200ADCD700B84131 /* wave8580_PST.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = wave8580_PST.cc; sourceTree = "<group>"; };
+		3FE6C430200ADCD700B84131 /* wave8580_PS_.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = wave8580_PS_.cc; sourceTree = "<group>"; };
+		3FE6C431200ADCD700B84131 /* wave8580_P_T.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = wave8580_P_T.cc; sourceTree = "<group>"; };
+		3FE6C432200ADCD700B84131 /* wave8580__ST.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = wave8580__ST.cc; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		3FE6C3C7200ACFFA00B84131 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3FE6C3F9200AD48800B84131 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -40,7 +124,9 @@
 			isa = PBXGroup;
 			children = (
 				3FE6C3F5200AD1C000B84131 /* Instrument */,
+				3FE6C41A200ADCD700B84131 /* Resid */,
 				3FE6C3CC200ACFFA00B84131 /* AUSid macOS */,
+				3FE6C3FD200AD48800B84131 /* Instrument macOS */,
 				3FE6C3CB200ACFFA00B84131 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -49,6 +135,7 @@
 			isa = PBXGroup;
 			children = (
 				3FE6C3CA200ACFFA00B84131 /* AUSid macOS.app */,
+				3FE6C3FC200AD48800B84131 /* Instrument macOS.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -78,8 +165,63 @@
 			isa = PBXGroup;
 			children = (
 				3FE6C3F6200AD1E300B84131 /* SimplePlayEngine.swift */,
+				3FE6C413200ADA0F00B84131 /* EventRenderer.h */,
+				3FE6C419200ADAFB00B84131 /* InstrumentRenderer.h */,
+				3FE6C416200ADA5000B84131 /* InstrumentAudioUnit.h */,
+				3FE6C417200ADA5000B84131 /* InstrumentAudioUnit.mm */,
+				3FE6C407200AD48800B84131 /* Instrument-Bridging-Header.h */,
 			);
 			path = Instrument;
+			sourceTree = "<group>";
+		};
+		3FE6C3FD200AD48800B84131 /* Instrument macOS */ = {
+			isa = PBXGroup;
+			children = (
+				3FE6C411200AD4C000B84131 /* Resources */,
+				3FE6C401200AD48800B84131 /* AudioUnitViewController.swift */,
+			);
+			path = "Instrument macOS";
+			sourceTree = "<group>";
+		};
+		3FE6C411200AD4C000B84131 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				3FE6C403200AD48800B84131 /* AudioUnitViewController.xib */,
+				3FE6C406200AD48800B84131 /* Info.plist */,
+				3FE6C408200AD48800B84131 /* Instrument_macOS.entitlements */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		3FE6C41A200ADCD700B84131 /* Resid */ = {
+			isa = PBXGroup;
+			children = (
+				3FE6C41B200ADCD700B84131 /* envelope.cc */,
+				3FE6C41C200ADCD700B84131 /* envelope.h */,
+				3FE6C41D200ADCD700B84131 /* extfilt.cc */,
+				3FE6C41E200ADCD700B84131 /* extfilt.h */,
+				3FE6C41F200ADCD700B84131 /* filter.cc */,
+				3FE6C420200ADCD700B84131 /* filter.h */,
+				3FE6C421200ADCD700B84131 /* pot.cc */,
+				3FE6C422200ADCD700B84131 /* pot.h */,
+				3FE6C423200ADCD700B84131 /* sid.cc */,
+				3FE6C424200ADCD700B84131 /* sid.h */,
+				3FE6C425200ADCD700B84131 /* siddefs.h */,
+				3FE6C426200ADCD700B84131 /* spline.h */,
+				3FE6C427200ADCD700B84131 /* voice.cc */,
+				3FE6C428200ADCD700B84131 /* voice.h */,
+				3FE6C429200ADCD700B84131 /* wave.cc */,
+				3FE6C42A200ADCD700B84131 /* wave.h */,
+				3FE6C42B200ADCD700B84131 /* wave6581_PST.cc */,
+				3FE6C42C200ADCD700B84131 /* wave6581_PS_.cc */,
+				3FE6C42D200ADCD700B84131 /* wave6581_P_T.cc */,
+				3FE6C42E200ADCD700B84131 /* wave6581__ST.cc */,
+				3FE6C42F200ADCD700B84131 /* wave8580_PST.cc */,
+				3FE6C430200ADCD700B84131 /* wave8580_PS_.cc */,
+				3FE6C431200ADCD700B84131 /* wave8580_P_T.cc */,
+				3FE6C432200ADCD700B84131 /* wave8580__ST.cc */,
+			);
+			path = Resid;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -92,15 +234,34 @@
 				3FE6C3C6200ACFFA00B84131 /* Sources */,
 				3FE6C3C7200ACFFA00B84131 /* Frameworks */,
 				3FE6C3C8200ACFFA00B84131 /* Resources */,
+				3FE6C40F200AD48800B84131 /* Embed App Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				3FE6C40A200AD48800B84131 /* PBXTargetDependency */,
 			);
 			name = "AUSid macOS";
 			productName = "AUSid macOS";
 			productReference = 3FE6C3CA200ACFFA00B84131 /* AUSid macOS.app */;
 			productType = "com.apple.product-type.application";
+		};
+		3FE6C3FB200AD48800B84131 /* Instrument macOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3FE6C40C200AD48800B84131 /* Build configuration list for PBXNativeTarget "Instrument macOS" */;
+			buildPhases = (
+				3FE6C3F8200AD48800B84131 /* Sources */,
+				3FE6C3F9200AD48800B84131 /* Frameworks */,
+				3FE6C3FA200AD48800B84131 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Instrument macOS";
+			productName = "Instrument macOS";
+			productReference = 3FE6C3FC200AD48800B84131 /* Instrument macOS.appex */;
+			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
 
@@ -112,6 +273,10 @@
 				LastUpgradeCheck = 0920;
 				TargetAttributes = {
 					3FE6C3C9200ACFFA00B84131 = {
+						CreatedOnToolsVersion = 9.2;
+						ProvisioningStyle = Automatic;
+					};
+					3FE6C3FB200AD48800B84131 = {
 						CreatedOnToolsVersion = 9.2;
 						ProvisioningStyle = Automatic;
 					};
@@ -131,6 +296,7 @@
 			projectRoot = "";
 			targets = (
 				3FE6C3C9200ACFFA00B84131 /* AUSid macOS */,
+				3FE6C3FB200AD48800B84131 /* Instrument macOS */,
 			);
 		};
 /* End PBXProject section */
@@ -142,6 +308,14 @@
 			files = (
 				3FE6C3D2200ACFFA00B84131 /* Assets.xcassets in Resources */,
 				3FE6C3D5200ACFFA00B84131 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3FE6C3FA200AD48800B84131 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3FE6C405200AD48800B84131 /* AudioUnitViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -158,7 +332,39 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		3FE6C3F8200AD48800B84131 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3FE6C440200ADCD700B84131 /* wave8580_P_T.cc in Sources */,
+				3FE6C434200ADCD700B84131 /* extfilt.cc in Sources */,
+				3FE6C438200ADCD700B84131 /* voice.cc in Sources */,
+				3FE6C437200ADCD700B84131 /* sid.cc in Sources */,
+				3FE6C43E200ADCD700B84131 /* wave8580_PST.cc in Sources */,
+				3FE6C433200ADCD700B84131 /* envelope.cc in Sources */,
+				3FE6C43D200ADCD700B84131 /* wave6581__ST.cc in Sources */,
+				3FE6C435200ADCD700B84131 /* filter.cc in Sources */,
+				3FE6C402200AD48800B84131 /* AudioUnitViewController.swift in Sources */,
+				3FE6C441200ADCD700B84131 /* wave8580__ST.cc in Sources */,
+				3FE6C43C200ADCD700B84131 /* wave6581_P_T.cc in Sources */,
+				3FE6C43B200ADCD700B84131 /* wave6581_PS_.cc in Sources */,
+				3FE6C418200ADA5000B84131 /* InstrumentAudioUnit.mm in Sources */,
+				3FE6C43F200ADCD700B84131 /* wave8580_PS_.cc in Sources */,
+				3FE6C439200ADCD700B84131 /* wave.cc in Sources */,
+				3FE6C43A200ADCD700B84131 /* wave6581_PST.cc in Sources */,
+				3FE6C436200ADCD700B84131 /* pot.cc in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		3FE6C40A200AD48800B84131 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 3FE6C3FB200AD48800B84131 /* Instrument macOS */;
+			targetProxy = 3FE6C409200AD48800B84131 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		3FE6C3D3200ACFFA00B84131 /* Main.storyboard */ = {
@@ -167,6 +373,14 @@
 				3FE6C3D4200ACFFA00B84131 /* Base */,
 			);
 			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		3FE6C403200AD48800B84131 /* AudioUnitViewController.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				3FE6C404200AD48800B84131 /* Base */,
+			);
+			name = AudioUnitViewController.xib;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -187,6 +401,7 @@
 		3FE6C3D8200ACFFA00B84131 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -254,6 +469,7 @@
 		3FE6C3D9200ACFFA00B84131 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -310,6 +526,132 @@
 			};
 			name = Release;
 		};
+		3FE6C40D200AD48800B84131 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_ENTITLEMENTS = "Instrument macOS/Instrument_macOS.entitlements";
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = EPCUPW9SH8;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = "Instrument macOS/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @executable_path/../../../../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "name.malara.antonio.AUSid-macOS.Instrument-macOS";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OBJC_BRIDGING_HEADER = "Instrument/Instrument-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 4.0;
+			};
+			name = Debug;
+		};
+		3FE6C40E200AD48800B84131 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_ENTITLEMENTS = "Instrument macOS/Instrument_macOS.entitlements";
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = EPCUPW9SH8;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = "Instrument macOS/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @executable_path/../../../../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = "name.malara.antonio.AUSid-macOS.Instrument-macOS";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "Instrument/Instrument-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 4.0;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -327,6 +669,15 @@
 			buildConfigurations = (
 				3FE6C3D8200ACFFA00B84131 /* Debug */,
 				3FE6C3D9200ACFFA00B84131 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		3FE6C40C200AD48800B84131 /* Build configuration list for PBXNativeTarget "Instrument macOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3FE6C40D200AD48800B84131 /* Debug */,
+				3FE6C40E200AD48800B84131 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
