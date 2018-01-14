@@ -116,21 +116,21 @@ public:
         }
     }
     
-    void processAudio(AUAudioFrameCount frameCount,
-                      AUAudioFrameCount bufferOffset,
-                      AudioBufferList* outBufferListPtr) override
+    void processAudio(AUAudioFrameCount   frameCount,
+                      AUAudioFrameCount   bufferOffset,
+                      AudioBufferList   * outBufferListPtr) override
     {
         float* outL = (float*)outBufferListPtr->mBuffers[0].mData + bufferOffset;
         float* outR = (float*)outBufferListPtr->mBuffers[1].mData + bufferOffset;
         
         cycle_count delta_t = (int)roundf(985248.0f / sampleRate * frameCount);
-        sid.clock(delta_t, (sidbuffer + bufferOffset), sizeof(sidbuffer) - bufferOffset, 1);
+        sid.clock(delta_t, sidbuffer, sizeof(sidbuffer), 1);
         
-        for (AUAudioFrameCount i = bufferOffset; i < frameCount + bufferOffset; ++i) {
+        for (AUAudioFrameCount i = 0; i < frameCount; i++) {
             float s = sidbuffer[i] / (float)0xffff;
             
-            outL[i] = s;
-            outR[i] = s;
+            *outL++ = s;
+            *outR++ = s;
         }
     }
     

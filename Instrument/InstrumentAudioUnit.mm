@@ -48,8 +48,8 @@ static void PrepareOutputBuffers(AVAudioFrameCount frameCount,
     renderer.init(defaultFormat.channelCount, defaultFormat.sampleRate);
     
     AudioUnitParameterOptions flags = kAudioUnitParameterFlag_IsWritable |
-    kAudioUnitParameterFlag_IsReadable |
-    kAudioUnitParameterFlag_DisplayLogarithmic;
+                                      kAudioUnitParameterFlag_IsReadable |
+                                      kAudioUnitParameterFlag_DisplayLogarithmic;
     
     AUParameter *
     attackParam = [AUParameterTree createParameterWithIdentifier:@"attack"
