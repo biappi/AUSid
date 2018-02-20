@@ -14,6 +14,32 @@ static void PrepareOutputBuffers(AVAudioFrameCount frameCount,
                                  const AudioBufferList *originalAudioBufferList,
                                  AudioBufferList *outputData);
 
+static AUParameter * BoolParam(NSString                   * identifier,
+                               NSString                   * name,
+                               AUParameterAddress         * address,
+                               AUImplementorValueObserver   observer,
+                               AUImplementorValueProvider   provider)
+{
+    AUParameter *
+    param = [AUParameterTree createParameterWithIdentifier:identifier
+                                                      name:name
+                                                   address:*address
+                                                       min:0
+                                                       max:1
+                                                      unit:kAudioUnitParameterUnit_Boolean
+                                                  unitName:nil
+                                                     flags:kAudioUnitParameterFlag_IsReadable | kAudioUnitParameterFlag_IsWritable
+                                              valueStrings:nil
+                                       dependentParameters:nil];
+    
+    param.implementorValueObserver = observer;
+    param.implementorValueProvider = provider;
+
+    *address = *address + 1;
+    
+    return param;
+}
+
 @implementation InstrumentAudioUnit
 {
     AUParameterTree      * parameterTree;
@@ -47,43 +73,186 @@ static void PrepareOutputBuffers(AVAudioFrameCount frameCount,
     // Create a DSP kernel to handle the signal processing.
     renderer.init(defaultFormat.channelCount, defaultFormat.sampleRate);
     
-    AudioUnitParameterOptions flags = kAudioUnitParameterFlag_IsWritable |
-                                      kAudioUnitParameterFlag_IsReadable |
-                                      kAudioUnitParameterFlag_DisplayLogarithmic;
+    __block auto *instrumentRenderer = &renderer;
+
+    AUParameterAddress address = 0;
+
+    auto attackTimes       = @[ @"2 ms",   @"8 ms",   @"16 ms",  @"24 ms",
+                                @"38 ms",  @"56 ms",  @"68 ms",  @"80 ms",
+                                @"100 ms", @"250 ms", @"500 ms", @"800 ms",
+                                @"1 s",    @"3 s",    @"5 s",    @"8 s"  ];
     
-    AUParameter *
-    attackParam = [AUParameterTree createParameterWithIdentifier:@"attack"
-                                                            name:@"Attack"
-                                                         address:InstrumentParamAttack
-                                                             min:0.001
-                                                             max:10.0
-                                                            unit:kAudioUnitParameterUnit_Seconds
-                                                        unitName:nil
-                                                           flags:flags
-                                                    valueStrings:nil
-                                             dependentParameters:nil];
+    auto decayReleaseTimes = @[ @"6 ms",   @"24 ms",  @"48 ms",  @"72 ms",
+                                @"114 ms", @"168 ms", @"204 ms", @"240 ms",
+                                @"300 ms", @"750 ms", @"1.5 s",  @"2.4 s",
+                                @"3 s",    @"9 s",    @"15 s",   @"24 s" ];
+
+    auto noiseParam = BoolParam(@"noise",
+                                @"Noise",
+                                &address,
+                                ^(AUParameter * _Nonnull param, AUValue value) {
+                                    instrumentRenderer->noise = value != 0;
+                                },
+                                ^AUValue(AUParameter * _Nonnull param) {
+                                    return instrumentRenderer->noise ? 1.f : 0.f;
+                                });
+
+    auto pulseParam = BoolParam(@"pulse",
+                                @"Pulse",
+                                &address,
+                                ^(AUParameter * _Nonnull param, AUValue value) {
+                                    instrumentRenderer->pulse = value != 0;
+                                },
+                                ^AUValue(AUParameter * _Nonnull param) {
+                                    return instrumentRenderer->pulse ? 1.f : 0.f;
+                                });
+
+    auto sawParam   = BoolParam(@"saw",
+                                @"Saw",
+                                &address,
+                                ^(AUParameter * _Nonnull param, AUValue value) {
+                                    instrumentRenderer->saw = value != 0;
+                                },
+                                ^AUValue(AUParameter * _Nonnull param) {
+                                    return instrumentRenderer->saw ? 1.f : 0.f;
+                                });
+
+    auto triParam   = BoolParam(@"tri",
+                                @"Tri",
+                                &address,
+                                ^(AUParameter * _Nonnull param, AUValue value) {
+                                    instrumentRenderer->tri = value != 0;
+                                },
+                                ^AUValue(AUParameter * _Nonnull param) {
+                                    return instrumentRenderer->tri ? 1.f : 0.f;
+                                });
+
+    auto attackParam = [AUParameterTree createParameterWithIdentifier:@"attack"
+                                                                 name:@"Attack"
+                                                              address:address++
+                                                                  min:0x0
+                                                                  max:0xf
+                                                                 unit:kAudioUnitParameterUnit_Indexed
+                                                             unitName:nil
+                                                                flags:kAudioUnitParameterFlag_IsReadable | kAudioUnitParameterFlag_IsWritable
+                                                         valueStrings:attackTimes
+                                                  dependentParameters:nil];
     
-    AUParameter *
-    releaseParam = [AUParameterTree createParameterWithIdentifier:@"release"
-                                                             name:@"Release"
-                                                          address:InstrumentParamRelease
-                                                              min:0.001
-                                                              max:10.0
-                                                             unit:kAudioUnitParameterUnit_Seconds
-                                                         unitName:nil
-                                                            flags:flags
-                                                     valueStrings:nil
-                                              dependentParameters:nil];
+    attackParam.implementorValueObserver = ^(AUParameter * _Nonnull param, AUValue value) {
+        instrumentRenderer->attack = roundf(value);
+    };
     
-    // Initialize the parameter values.
-    attackParam.value = 0.01;
-    releaseParam.value = 0.1;
+    attackParam.implementorValueProvider = ^AUValue(AUParameter * _Nonnull param) {
+        return instrumentRenderer->attack;
+    };
+
+    auto decayParam = [AUParameterTree createParameterWithIdentifier:@"decay"
+                                                                name:@"Decay"
+                                                             address:address++
+                                                                 min:0x0
+                                                                 max:0xf
+                                                                unit:kAudioUnitParameterUnit_Indexed
+                                                            unitName:nil
+                                                               flags:kAudioUnitParameterFlag_IsReadable | kAudioUnitParameterFlag_IsWritable
+                                                        valueStrings:decayReleaseTimes
+                                                 dependentParameters:nil];
     
-    renderer.setParameter(InstrumentParamAttack, attackParam.value);
-    renderer.setParameter(InstrumentParamRelease, releaseParam.value);
+    decayParam.implementorValueObserver = ^(AUParameter * _Nonnull param, AUValue value) {
+        instrumentRenderer->decay = roundf(value);
+    };
+    
+    decayParam.implementorValueProvider = ^AUValue(AUParameter * _Nonnull param) {
+        return instrumentRenderer->decay;
+    };
+    
+    auto sustainParam = [AUParameterTree createParameterWithIdentifier:@"sustain"
+                                                                  name:@"Sustain"
+                                                               address:address++
+                                                                   min:0x0
+                                                                   max:0xf
+                                                                  unit:kAudioUnitParameterUnit_Generic
+                                                              unitName:nil
+                                                                 flags:kAudioUnitParameterFlag_IsReadable | kAudioUnitParameterFlag_IsWritable
+                                                          valueStrings:nil
+                                                   dependentParameters:nil];
+    
+    sustainParam.implementorValueObserver = ^(AUParameter * _Nonnull param, AUValue value) {
+        instrumentRenderer->sustain = roundf(value);
+    };
+    
+    sustainParam.implementorValueProvider = ^AUValue(AUParameter * _Nonnull param) {
+        return instrumentRenderer->sustain;
+    };
+    
+    auto releaseParam = [AUParameterTree createParameterWithIdentifier:@"release"
+                                                                  name:@"Release"
+                                                               address:address++
+                                                                   min:0x0
+                                                                   max:0xf
+                                                                  unit:kAudioUnitParameterUnit_Indexed
+                                                              unitName:nil
+                                                                 flags:kAudioUnitParameterFlag_IsReadable | kAudioUnitParameterFlag_IsWritable
+                                                          valueStrings:decayReleaseTimes
+                                                   dependentParameters:nil];
+    
+    releaseParam.implementorValueObserver = ^(AUParameter * _Nonnull param, AUValue value) {
+        instrumentRenderer->release = roundf(value);
+    };
+    
+    releaseParam.implementorValueProvider = ^AUValue(AUParameter * _Nonnull param) {
+        return instrumentRenderer->release;
+    };
+
+    auto pulseWidthParam = [AUParameterTree createParameterWithIdentifier:@"pulseWidth"
+                                                                     name:@"Pulse Width"
+                                                                  address:address++
+                                                                      min:0
+                                                                      max:100
+                                                                     unit:kAudioUnitParameterUnit_Percent
+                                                                 unitName:nil
+                                                                    flags:kAudioUnitParameterFlag_IsReadable | kAudioUnitParameterFlag_IsWritable
+                                                             valueStrings:nil
+                                                      dependentParameters:nil];
+    
+    pulseWidthParam.implementorValueObserver = ^(AUParameter * _Nonnull param, AUValue value) {
+        instrumentRenderer->pulseWith = value / 100.f;
+    };
+    
+    pulseWidthParam.implementorValueProvider = ^AUValue(AUParameter * _Nonnull param) {
+        return instrumentRenderer->pulseWith * 100.f;
+    };
+    
+    auto filterModes = @[ @"Off", @"Low Pass", @"High Pass", @"Band Pass" ];
+    
+    auto filterModeParam = [AUParameterTree createParameterWithIdentifier:@"filterMode"
+                                                                     name:@"Filter Mode"
+                                                                  address:address++
+                                                                      min:0
+                                                                      max:filterModes.count
+                                                                     unit:kAudioUnitParameterUnit_Indexed
+                                                                 unitName:nil
+                                                                    flags:kAudioUnitParameterFlag_IsReadable | kAudioUnitParameterFlag_IsWritable
+                                                             valueStrings:filterModes
+                                                      dependentParameters:nil];
+    
+    filterModeParam.implementorValueObserver = ^(AUParameter * _Nonnull param, AUValue value) {
+        instrumentRenderer->filterMode = roundf(value);
+    };
+    
+    filterModeParam.implementorValueProvider = ^AUValue(AUParameter * _Nonnull param) {
+        return instrumentRenderer->filterMode;
+    };
     
     // Create the parameter tree.
-    parameterTree = [AUParameterTree createTreeWithChildren:@[attackParam, releaseParam]];
+    auto params = @[ noiseParam,  pulseParam,   sawParam,   triParam,
+                     attackParam, sustainParam, decayParam, releaseParam,
+                     pulseWidthParam, filterModeParam ];
+
+    for (AUParameter *  param in params) {
+        param.value = param.implementorValueProvider(param);
+    }
+    
+    parameterTree = [AUParameterTree createTreeWithChildren:params];
     
     // Create the output bus.
     outputBus = [[AUAudioUnitBus alloc] initWithFormat:defaultFormat error:nil];
@@ -93,35 +262,6 @@ static void PrepareOutputBuffers(AVAudioFrameCount frameCount,
     outputBusArray = [[AUAudioUnitBusArray alloc] initWithAudioUnit:self
                                                             busType:AUAudioUnitBusTypeOutput
                                                              busses:@[outputBus]];
-    
-    // Make a local pointer to the kernel to avoid capturing self.
-    __block auto *instrumentRendrer = &renderer;
-    
-    // implementorValueObserver is called when a parameter changes value.
-    parameterTree.implementorValueObserver = ^(AUParameter *param, AUValue value) {
-        instrumentRendrer->setParameter(param.address, value);
-    };
-    
-    // implementorValueProvider is called when the value needs to be refreshed.
-    parameterTree.implementorValueProvider = ^(AUParameter *param) {
-        return instrumentRendrer->getParameter(param.address);
-    };
-    
-    // A function to provide string representations of parameter values.
-    parameterTree.implementorStringFromValueCallback = ^(AUParameter *param,
-                                                         const AUValue *__nullable valuePtr)
-    {
-        AUValue value = valuePtr == nil ? param.value : *valuePtr;
-        
-        switch (param.address) {
-            case InstrumentParamAttack:
-            case InstrumentParamRelease:
-                return [NSString stringWithFormat:@"%.3f", value];
-                
-            default:
-                return @"?";
-        }
-    };
     
     self.maximumFramesToRender = 512;
     
@@ -133,6 +273,10 @@ static void PrepareOutputBuffers(AVAudioFrameCount frameCount,
 }
 
 #pragma mark - AUAudioUnit (Overrides)
+
+- (AUParameterTree *)parameterTree {
+    return parameterTree;
+}
 
 - (AUAudioUnitBusArray *)outputBusses {
     return outputBusArray;

@@ -12,11 +12,6 @@
 #import "EventRenderer.h"
 #import "sid.h"
 
-enum {
-    InstrumentParamAttack  = 0,
-    InstrumentParamRelease = 1
-};
-
 uint8_t frequenciesLow[] = {
     0x17, 0x27, 0x39, 0x4b, 0x5f, 0x74, 0x8a, 0xa1, 0xba, 0xd4, 0xf0, 0x0e,
     0x2d, 0x4e, 0x71, 0x96, 0xbe, 0xe8, 0x14, 0x43, 0x74, 0xa9, 0xe1, 0x1c,
@@ -42,6 +37,40 @@ uint8_t frequenciesHigh[] = {
 class InstrumentRenderer : public EventRenderer {
     
 public:
+    bool noise         = false;
+    bool pulse         = false;
+    bool saw           = true;
+    bool tri           = false;
+    
+    uint8_t attack     = 0x0;
+    uint8_t decay      = 0x0;
+    uint8_t sustain    = 0xf;
+    uint8_t release    = 0x0;
+    
+    float   pulseWith  = (float(2048) / float(0x0fff));
+
+    uint8_t filterMode = 0;
+    float   cutoff     = (float(2048) / float(0x0fff));
+    uint8_t resonance  = 0;
+    
+    uint8_t waveform() {
+        return
+            (noise ? 0b10000000 : 0) |
+            (pulse ? 0b01000000 : 0) |
+            (saw   ? 0b00100000 : 0) |
+            (tri   ? 0b00010000 : 0);
+    }
+    
+    uint8_t ad() { return (attack  & 0xf) << 4 | (decay   & 0xf); }
+    uint8_t sr() { return (sustain & 0xf) << 4 | (release & 0xf); }
+    
+    uint8_t pulseWidthLow()  { return  uint16_t(pulseWith * 0x0fff)       & 0xff; }
+    uint8_t pulseWidthHigh() { return (uint16_t(pulseWith * 0x0fff) >> 8) & 0xff; }
+    
+    uint8_t filterReg() {
+        if (filterMode == 0) return 0;
+        return 1 << ((filterMode - 1) + 4);
+    }
     
     void init(int channelCount, double inSampleRate) {
         sampleRate = float(inSampleRate);
@@ -51,36 +80,10 @@ public:
         sid.reset();
         
         sid.write(24, 0x0f); // volume
-        sid.write( 1, 0x20); // freq
-        sid.write( 5, 0x77); // AD
-        sid.write( 6, 0x77); // SR
-    }
-    
-    void setParameter(AUParameterAddress address, AUValue value) {
-        switch (address) {
-            case InstrumentParamAttack:
-                break;
-                
-            case InstrumentParamRelease:
-                break;
-        }
-    }
-    
-    AUValue getParameter(AUParameterAddress address) {
-        switch (address) {
-            case InstrumentParamAttack:
-                return 0;
-                
-            case InstrumentParamRelease:
-                return 0;
-                
-            default:
-                return 0.0f;
-        }
     }
     
     virtual void handleEvent(AUParameterEvent const& event) override {
-        setParameter(event.parameterAddress, event.value);
+//        setParameter(event.parameterAddress, event.value);
     }
     
     virtual void handleEvent(AUMIDIEvent const& midiEvent) override {
@@ -95,7 +98,7 @@ public:
                 uint8_t note = midiEvent.data[1];
                 if (note > 127) break;
 
-                sid.write( 4, 0x00); // * DING *
+                sid.write( 4, waveform() & ~1); // * DING *
                 
                 break;
             }
@@ -107,9 +110,13 @@ public:
                 
                 sid.write( 0, frequenciesLow[note - 24]);
                 sid.write( 1, frequenciesHigh[note - 24]);
-                
-                sid.write( 4, 0b00100000); // * DING *
-                sid.write( 4, 0b00100001); // * DING *
+                sid.write( 2, pulseWidthLow());
+                sid.write( 3, pulseWidthHigh());
+                sid.write( 5, ad());
+                sid.write( 6, sr());
+
+//                sid.write( 4, 0b00100000); // * DING *
+                sid.write( 4, waveform() | 1); // * DING *
                 
                 break;
             }
