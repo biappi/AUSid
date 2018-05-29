@@ -34,25 +34,28 @@ uint8_t frequenciesHigh[] = {
     0x8b, 0x93, 0x9c, 0xa5, 0xaf, 0xb9, 0xc4, 0xd0, 0xdd, 0xea, 0xf8, 0xff,
 };
 
-class InstrumentRenderer : public EventRenderer {
-    
-public:
-    bool noise         = false;
-    bool pulse         = false;
-    bool saw           = true;
-    bool tri           = false;
-    
-    uint8_t attack     = 0x0;
-    uint8_t decay      = 0x0;
-    uint8_t sustain    = 0xf;
-    uint8_t release    = 0x0;
-    
-    float   pulseWith  = (float(2048) / float(0x0fff));
 
-    uint8_t filterMode = 0;
-    float   cutoff     = (float(2048) / float(0x0fff));
-    uint8_t resonance  = 0;
-    
+class InstrumentRenderer : public EventRenderer {
+
+private:
+	bool noise         = false;
+	bool pulse         = false;
+	bool saw           = true;
+	bool tri           = false;
+	
+	uint8_t attack     = 0x0;
+	uint8_t decay      = 0x0;
+	uint8_t sustain    = 0xf;
+	uint8_t release    = 0x0;
+	
+	float   pulseWidth = (float(2048) / float(0x0fff));
+	
+	float   cutoff     = (float(2048) / float(0x0fff));
+	uint8_t resonance  = 0;
+	uint8_t filterMode = 0;
+
+public:
+	
     uint8_t waveform() {
         return
             (noise ? 0b10000000 : 0) |
@@ -64,21 +67,52 @@ public:
     uint8_t ad() { return (attack  & 0xf) << 4 | (decay   & 0xf); }
     uint8_t sr() { return (sustain & 0xf) << 4 | (release & 0xf); }
     
-    uint8_t pulseWidthLow()  { return  uint16_t(pulseWith * 0x0fff)       & 0xff; }
-    uint8_t pulseWidthHigh() { return (uint16_t(pulseWith * 0x0fff) >> 8) & 0xff; }
+    uint8_t pulseWidthLow()  { return  uint16_t(pulseWidth * 0x0fff)       & 0xff; }
+    uint8_t pulseWidthHigh() { return (uint16_t(pulseWidth * 0x0fff) >> 8) & 0xff; }
     
     uint8_t filterReg() {
         if (filterMode == 0) return 0;
         return 1 << ((filterMode - 1) + 4);
     }
-    
+	
+	void setNoise      (bool    newValue) { noise      = newValue; };
+	void setPulse      (bool    newValue) { pulse      = newValue; };
+	void setSaw        (bool    newValue) { saw        = newValue; };
+	void setTri        (bool    newValue) { tri        = newValue; };
+
+	void setAttack     (uint8_t newValue) { attack     = newValue; };
+	void setDecay      (uint8_t newValue) { decay      = newValue; };
+	void setSustain    (uint8_t newValue) { sustain    = newValue; };
+	void setRelease    (uint8_t newValue) { release    = newValue; };
+	
+	void setPulseWidth (float   newValue) { pulseWidth = newValue; };
+	
+	void setFilterMode (uint8_t newValue) { filterMode = newValue; };
+
+public:
+	
+	bool    getNoise      () { return noise;      };
+	bool    getPulse      () { return pulse;      };
+	bool    getSaw        () { return saw;        };
+	bool    getTri        () { return tri;        };
+	
+	uint8_t getAttack     () { return attack;     };
+	uint8_t getDecay      () { return decay;      };
+	uint8_t getSustain    () { return sustain;    };
+	uint8_t getRelease    () { return release;    };
+	
+	float   getPulseWidth () { return pulseWidth; };
+	
+	uint8_t getFilterMode () { return filterMode; };
+
+public:
+	
     void init(int channelCount, double inSampleRate) {
         sampleRate = float(inSampleRate);
         
         sid.set_sampling_parameters(985248, SAMPLE_FAST, inSampleRate);
-        
         sid.reset();
-        
+		
         sid.write(24, 0x0f); // volume
     }
     
@@ -104,14 +138,15 @@ public:
             }
                 
             case 0x90 : { // note on
-                uint8_t note = midiEvent.data[1];
+                uint8_t note  = midiEvent.data[1];
                 uint8_t veloc = midiEvent.data[2];
+				
                 if (note > 127 || veloc > 127) break;
                 
-                sid.write( 0, frequenciesLow[note - 24]);
-                sid.write( 1, frequenciesHigh[note - 24]);
-                sid.write( 2, pulseWidthLow());
-                sid.write( 3, pulseWidthHigh());
+                sid.write( 0, frequenciesLow  [note - 24]);
+                sid.write( 1, frequenciesHigh [note - 24]);
+                sid.write( 2, pulseWidthLow  ());
+                sid.write( 3, pulseWidthHigh ());
                 sid.write( 5, ad());
                 sid.write( 6, sr());
 

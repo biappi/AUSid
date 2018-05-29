@@ -47,6 +47,7 @@ static AUParameter * BoolParam(NSString                   * identifier,
     AUAudioUnitBusArray  * outputBusArray;
     AUAudioUnitBus       * outputBus;
     AVAudioPCMBuffer     * pcmBuffer;
+    NSArray<NSNumber *>  * channelCapabilities;
     
     AudioBufferList     ** outputBufferList; // Hack for iOS
     
@@ -91,40 +92,40 @@ static AUParameter * BoolParam(NSString                   * identifier,
                                 @"Noise",
                                 &address,
                                 ^(AUParameter * _Nonnull param, AUValue value) {
-                                    instrumentRenderer->noise = value != 0;
+                                    instrumentRenderer->setNoise(value != 0);
                                 },
                                 ^AUValue(AUParameter * _Nonnull param) {
-                                    return instrumentRenderer->noise ? 1.f : 0.f;
+                                    return instrumentRenderer->getNoise() ? 1.f : 0.f;
                                 });
 
     auto pulseParam = BoolParam(@"pulse",
                                 @"Pulse",
                                 &address,
                                 ^(AUParameter * _Nonnull param, AUValue value) {
-                                    instrumentRenderer->pulse = value != 0;
+                                    instrumentRenderer->setPulse(value != 0);
                                 },
                                 ^AUValue(AUParameter * _Nonnull param) {
-                                    return instrumentRenderer->pulse ? 1.f : 0.f;
+                                    return instrumentRenderer->getPulse() ? 1.f : 0.f;
                                 });
 
     auto sawParam   = BoolParam(@"saw",
                                 @"Saw",
                                 &address,
                                 ^(AUParameter * _Nonnull param, AUValue value) {
-                                    instrumentRenderer->saw = value != 0;
+                                    instrumentRenderer->setSaw(value != 0);
                                 },
                                 ^AUValue(AUParameter * _Nonnull param) {
-                                    return instrumentRenderer->saw ? 1.f : 0.f;
+                                    return instrumentRenderer->getSaw() ? 1.f : 0.f;
                                 });
 
     auto triParam   = BoolParam(@"tri",
                                 @"Tri",
                                 &address,
                                 ^(AUParameter * _Nonnull param, AUValue value) {
-                                    instrumentRenderer->tri = value != 0;
+                                    instrumentRenderer->setTri(value != 0);
                                 },
                                 ^AUValue(AUParameter * _Nonnull param) {
-                                    return instrumentRenderer->tri ? 1.f : 0.f;
+                                    return instrumentRenderer->getTri() ? 1.f : 0.f;
                                 });
 
     auto attackParam = [AUParameterTree createParameterWithIdentifier:@"attack"
@@ -139,11 +140,11 @@ static AUParameter * BoolParam(NSString                   * identifier,
                                                   dependentParameters:nil];
     
     attackParam.implementorValueObserver = ^(AUParameter * _Nonnull param, AUValue value) {
-        instrumentRenderer->attack = roundf(value);
+        instrumentRenderer->setAttack(roundf(value));
     };
     
     attackParam.implementorValueProvider = ^AUValue(AUParameter * _Nonnull param) {
-        return instrumentRenderer->attack;
+        return instrumentRenderer->getAttack();
     };
 
     auto decayParam = [AUParameterTree createParameterWithIdentifier:@"decay"
@@ -158,11 +159,11 @@ static AUParameter * BoolParam(NSString                   * identifier,
                                                  dependentParameters:nil];
     
     decayParam.implementorValueObserver = ^(AUParameter * _Nonnull param, AUValue value) {
-        instrumentRenderer->decay = roundf(value);
+        instrumentRenderer->setDecay(roundf(value));
     };
     
     decayParam.implementorValueProvider = ^AUValue(AUParameter * _Nonnull param) {
-        return instrumentRenderer->decay;
+        return instrumentRenderer->getDecay();
     };
     
     auto sustainParam = [AUParameterTree createParameterWithIdentifier:@"sustain"
@@ -177,11 +178,11 @@ static AUParameter * BoolParam(NSString                   * identifier,
                                                    dependentParameters:nil];
     
     sustainParam.implementorValueObserver = ^(AUParameter * _Nonnull param, AUValue value) {
-        instrumentRenderer->sustain = roundf(value);
+		instrumentRenderer->setSustain(roundf(value));
     };
     
     sustainParam.implementorValueProvider = ^AUValue(AUParameter * _Nonnull param) {
-        return instrumentRenderer->sustain;
+        return instrumentRenderer->getSustain();
     };
     
     auto releaseParam = [AUParameterTree createParameterWithIdentifier:@"release"
@@ -196,11 +197,11 @@ static AUParameter * BoolParam(NSString                   * identifier,
                                                    dependentParameters:nil];
     
     releaseParam.implementorValueObserver = ^(AUParameter * _Nonnull param, AUValue value) {
-        instrumentRenderer->release = roundf(value);
+        instrumentRenderer->setRelease(roundf(value));
     };
     
     releaseParam.implementorValueProvider = ^AUValue(AUParameter * _Nonnull param) {
-        return instrumentRenderer->release;
+        return instrumentRenderer->getRelease();
     };
 
     auto pulseWidthParam = [AUParameterTree createParameterWithIdentifier:@"pulseWidth"
@@ -215,11 +216,11 @@ static AUParameter * BoolParam(NSString                   * identifier,
                                                       dependentParameters:nil];
     
     pulseWidthParam.implementorValueObserver = ^(AUParameter * _Nonnull param, AUValue value) {
-        instrumentRenderer->pulseWith = value / 100.f;
+        instrumentRenderer->setPulseWidth(value / 100.f);
     };
     
     pulseWidthParam.implementorValueProvider = ^AUValue(AUParameter * _Nonnull param) {
-        return instrumentRenderer->pulseWith * 100.f;
+        return instrumentRenderer->getPulseWidth() * 100.f;
     };
     
     auto filterModes = @[ @"Off", @"Low Pass", @"High Pass", @"Band Pass" ];
@@ -228,7 +229,7 @@ static AUParameter * BoolParam(NSString                   * identifier,
                                                                      name:@"Filter Mode"
                                                                   address:address++
                                                                       min:0
-                                                                      max:filterModes.count
+                                                                      max:filterModes.count - 1
                                                                      unit:kAudioUnitParameterUnit_Indexed
                                                                  unitName:nil
                                                                     flags:kAudioUnitParameterFlag_IsReadable | kAudioUnitParameterFlag_IsWritable
@@ -236,11 +237,11 @@ static AUParameter * BoolParam(NSString                   * identifier,
                                                       dependentParameters:nil];
     
     filterModeParam.implementorValueObserver = ^(AUParameter * _Nonnull param, AUValue value) {
-        instrumentRenderer->filterMode = roundf(value);
+        instrumentRenderer->setFilterMode(roundf(value));
     };
     
     filterModeParam.implementorValueProvider = ^AUValue(AUParameter * _Nonnull param) {
-        return instrumentRenderer->filterMode;
+        return instrumentRenderer->getFilterMode();
     };
     
     // Create the parameter tree.
@@ -256,15 +257,18 @@ static AUParameter * BoolParam(NSString                   * identifier,
     
     // Create the output bus.
     outputBus = [[AUAudioUnitBus alloc] initWithFormat:defaultFormat error:nil];
+	
     outputBus.maximumChannelCount = 2;
     
     // Create the input and output bus arrays.
     outputBusArray = [[AUAudioUnitBusArray alloc] initWithAudioUnit:self
                                                             busType:AUAudioUnitBusTypeOutput
                                                              busses:@[outputBus]];
-    
+	
+	channelCapabilities   = @[ @0, @2 ];
+	
     self.maximumFramesToRender = 512;
-    
+	
     return self;
 }
 
@@ -280,6 +284,10 @@ static AUParameter * BoolParam(NSString                   * identifier,
 
 - (AUAudioUnitBusArray *)outputBusses {
     return outputBusArray;
+}
+
+- (NSArray<NSNumber *> *)channelCapabilities {
+	return channelCapabilities;
 }
 
 - (BOOL)allocateRenderResourcesAndReturnError:(NSError **)outError {
